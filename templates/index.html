@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% block title %}
+    <title>學生資料管理系統</title>
+{% endblock  %}
+
+{% block content %}
+<section class="head_content hero-panel">
+    <p class="eyebrow">Student Registry</p>
+    <h1>學生資料管理系統</h1>
+    {% comment %}<h2>目前的資料筆數:{{data_count}}，<a href="/post/">新增學生資料</a></h2>{% endcomment %}
+    <div class="hero-actions">
+        <div class="stat-card">
+            <span>目前資料筆數</span>
+            <strong>{{data_count}}</strong>
+        </div>
+        <a class="button primary" href="{% url 'post' %}">新增學生資料</a>
+    </div>
+    <div class="search-wrap">
+        <form class="search-form" action="{% url 'index'%}" method="GET">
+            <label for="site_search">搜尋關鍵字</label>
+            <input type="text" id="site_search" name="site_search" placeholder="姓名、信箱、電話或地址">
+            <input class="button" type="submit" value="搜尋">
+        </form>
+    </div>
+</section>
+<section class="main_content content-panel">
+    <div class="table-scroll">
+    <table class="data-table">
+        {% if status %}
+        <tr>
+            <th>學號</th>
+            <th>姓名</th>
+            <th>性別</th>
+            <th>生日</th>
+            <th>信箱</th>
+            <th>電話</th>
+            <th>地址</th>
+            <th>編輯</th>
+        </tr>
+        {% for data in resultList %}
+        <tr>
+            <td>{{data.cid}}</td>
+            <td>{{data.cname}}</td>
+            <td>{%if data.csex == "M"%}男{% else %}女{% endif%}</td>
+            <td>{{data.cbirthday|date:"Y-m-d"}}</td>
+            <td>{{data.cemail}}</td>
+            <td>{{data.cphone}}</td>
+            <td>{{data.caddr}}</td>
+            <td>
+                {% comment  %}<a href="/edit/{{data.cid}}">編輯</a>{% endcomment %}
+                <a class="text-link" href="{% url 'edit' data.cid %}">編輯</a>
+                {% comment  %}補充get{% endcomment %}
+                {% comment  %}<a href="/edit/?cid={{data.cid}}">編輯</a>{% endcomment %}
+                {% comment  %}<a href="/delete/{{data.cid}}/">刪除</a>{% endcomment %}
+                <a class="text-link danger" href="{% url 'delete' data.cid %}">刪除</a>
+            </td>
+        </tr>
+        {% endfor %}       
+    </table>
+    </div>
+
+    <div class="pagination">
+        {% comment  %}最前頁{% endcomment %}
+        {% if page_obj.has_previous %}
+            <a href="?page=1">最前頁</a>
+        {% else %}
+            <span>最前頁</span>
+        {% endif %}
+        {% comment  %}上一頁{% endcomment %}
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}">上一頁</a>
+        {% else %}
+            <span>上一頁</span>
+        {% endif %}
+
+
+        {% comment  %}中間頁碼{% endcomment %}
+        {% for num in page_obj.paginator.page_range %}
+            {% if page_obj.number == num %}
+                <span>{{ num }}</span>
+            {% else %}
+                <a href="?page={{ num }}">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+
+
+        {% comment  %}下一頁{% endcomment %}
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">下一頁</a>
+        {% else %}
+            <span>下一頁</span>
+        {% endif %}
+        {% comment  %}最末頁{% endcomment %}
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.paginator.num_pages }}">最末頁</a>
+        {% else %}
+            <span>最末頁</span>
+        {% endif %}
+    </div>
+
+
+    {% else %}
+        <h1 class="empty-message">{{errormessage}}</h1>
+    {% endif %}  
+</section>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}
+    <title>學生資料管理系統-刪除學生資料</title>
+{% endblock %}
+{% block content %}
+<section class="head_content form-heading danger-heading">
+    <p class="eyebrow">Delete Student</p>
+    <h1>學生資料管理系統-刪除學生資料</h1>
+    <a class="text-link" href="{% url "index" %}">回首頁</a>
+</section>
+<section class="form-panel">
+    {% comment %} <form action="/edit/{{obj_data.cid}}" method="POST"> {% endcomment %}
+    <form class="student-form" action="{% url 'delete' obj_data.cid %}" method="POST">
+        {% csrf_token %}
+        <table>
+            <tr><!--value文字預設值-->
+                <th>*姓名</th><td>{{ obj_data.cname }}</td>
+            </tr>
+            <tr>
+                <th>*性別</th>
+                <td>
+                    {% if obj_data.csex == "M" %}男{% else %}女{% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th>*生日</th><td>{{obj_data.cbirthday|date:'Y-m-d'}}</td>
+            </tr>
+            <tr>
+                <th>*信箱</th><td>{{ obj_data.cemail }}</td>
+            </tr>
+            <tr>
+                <th>&nbsp;&nbsp;電話</th><td>{{ obj_data.cphone }}</td>
+            </tr>
+            <tr>
+                <th>&nbsp;&nbsp;地址</th><td>{{ obj_data.caddr }}</td>
+            </tr>
+            <tr>
+                <th colspan="2" class="form-actions">
+                    <input class="button danger-button" type="submit" name="button" id="button" value="刪除" onclick="return doubleCheck();">
+                </th>
+
+            </tr>
+        </table>
+
+    </form>
+</section>
+<script>
+    //透過javaScript
+    function doubleCheck() {
+        return confirm("確定要刪除這筆資料嗎？\n刪除後將無法復原!\n");
+    }
+</script>
+{% endblock %}

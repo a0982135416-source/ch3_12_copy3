@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}
+    <title>學生搜尋結果</title>
+{% endblock %}
+{% block content %}
+<section class="head_content form-heading">
+    <p class="eyebrow">Results</p>
+    <h1>學生搜尋結果</h1>
+    <a class="text-link" href="{% url "search_name" %}">重新搜尋</a>
+</section>
+<section class="content-panel">
+    {% if errormessage %}
+        <h1 class="empty-message">{{errormessage}}</h1>
+    {% endif %}
+    <div class="table-scroll">
+    <table class="data-table">
+        <tr>
+            <th>學號</th>
+            <th>姓名</th>
+            <th>性別</th>
+            <th>生日</th>
+            <th>信箱</th>
+            <th>電話</th>
+            <th>地址</th>
+        </tr>
+    {% for data in resultList %}
+        <tr>
+            <td>{{data.cid}}</td>
+            <td>{{data.cname}}</td>
+            <td>{%if data.csex == "M"%}男{% else %}女{% endif%}</td>
+            <td>{{data.cbirthday|date:"Y-m-d"}}</td>
+            <td>{{data.cemail}}</td>
+            <td>{{data.cphone}}</td>
+            <td>{{data.caddr}}</td>
+        </tr>
+    {% endfor %}    
+    </table>
+    </div>
+</section>
+{% endblock %}
